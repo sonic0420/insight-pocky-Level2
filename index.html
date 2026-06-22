@@ -88,7 +88,7 @@
 <body>
 <div id="authgate">
   <div class="agbox">
-    <div class="agt">Pocky 芒果百香</div>
+    <div class="agt">Pocky芒果果粒百香風味優格棒</div>
     <div class="ags">策略洞察報告・請輸入密碼</div>
     <input id="authpw" type="password" placeholder="密碼" autocomplete="off" onkeydown="if(event.key==='Enter')authCheck()">
     <button onclick="authCheck()">進入報告</button>
@@ -97,8 +97,8 @@
 </div>
 <style>
   #authgate{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#C8102E,#9c0c23);display:flex;align-items:center;justify-content:center;font-family:"Noto Sans TC","PingFang TC",sans-serif}
-  #authgate .agbox{background:#fff;border-radius:16px;padding:36px 32px;max-width:360px;width:88%;box-shadow:0 14px 44px rgba(0,0,0,.28);text-align:center}
-  #authgate .agt{font-size:22px;font-weight:800;color:#9c0c23;margin-bottom:6px}
+  #authgate .agbox{background:#fff;border-radius:16px;padding:36px 32px;max-width:380px;width:88%;box-shadow:0 14px 44px rgba(0,0,0,.28);text-align:center}
+  #authgate .agt{font-size:19px;font-weight:800;color:#9c0c23;margin-bottom:6px;line-height:1.4}
   #authgate .ags{font-size:14px;color:#5b6675;margin-bottom:20px}
   #authgate input{width:100%;padding:11px 13px;border:1px solid #e6e9ef;border-radius:9px;font-size:15px;margin-bottom:12px}
   #authgate button{width:100%;padding:11px;border:none;border-radius:9px;background:#C8102E;color:#fff;font-weight:800;font-size:15px;cursor:pointer}
@@ -309,12 +309,12 @@
         <div class="block"><h3><span class="ic">◷</span>觀察</h3>
           <table><thead><tr><th>商品</th><th>A 期買家</th><th>B 期買家</th><th>兩期都買</th><th>回購率(A→B)</th><th>B 新客佔比</th></tr></thead><tbody>
             <tr><td>Pocky芒果果粒百香風味優格棒</td><td>9,022</td><td>9,825</td><td>283</td><td>3.1%</td><td>97.1%</td></tr>
-            <tr><td>藍莓</td><td>8,701</td><td>8,232</td><td>369</td><td>4.2%</td><td>95.5%</td></tr>
+            <tr><td>Pocky百奇藍莓果粒優格棒</td><td>8,701</td><td>8,232</td><td>369</td><td>4.2%</td><td>95.5%</td></tr>
             
           </tbody></table>
           <p class="note">算法：容斥原理 兩期都買 ＝ A ＋ B − 聯集(A∪B)；得到的是「人數」,非「名單」(個別用戶 ID 目前 API 不可取)。</p>
           <h3><span class="ic">∵</span>拆解</h3><p>同口味零食在數週內由同一人再買的機率本就低;結合高覆蓋,我們每波都在同一個大池子裡「抽出不同的個體」成交。</p></div>
-        <div class="meaning"><b>代表：每一波幾乎換一批新面孔。</b>兩支重複率都極低(Pocky芒果果粒百香風味優格棒 3.1%、藍莓 4.2%),Pocky芒果果粒百香風味優格棒並非異常——這是「廣度驅動的試用型商品」的常態,不該誤讀成「沒留住客」。</div>
+        <div class="meaning"><b>代表：每一波幾乎換一批新面孔。</b>兩支重複率都極低(Pocky芒果果粒百香風味優格棒 3.1%、Pocky百奇藍莓果粒優格棒 4.2%),Pocky芒果果粒百香風味優格棒並非異常——這是「廣度驅動的試用型商品」的常態,不該誤讀成「沒留住客」。</div>
         <div class="meaning gold"><b>最大未開發槓桿＝前波買家。</b>B 期約 <b>97% 是前段未購此口味者</b>;反過來說,前段買過的那批人(Pocky芒果果粒百香風味優格棒約 9,000)幾乎是一張<b>全新、未被再行銷的名單</b>。</div>
         <div class="action"><span class="lab">行動</span><span>(a) 多波多機制持續換血、擴大試用廣度;(b) 對前波買家做回購喚醒,把廣度補上深度。</span></div>
       </section>
