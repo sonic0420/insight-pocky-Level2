@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocky 芒果百香｜策略洞察報告</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--red:#C8102E;--red-d:#9c0c23;--ink:#1c2433;--muted:#5b6675;--line:#e6e9ef;--bg:#f6f7f9;
+    --card:#fff;--good:#1f9d6b;--gold:#c8861a;--chip:#f0f2f6;--purple:#6b4bb0;--navw:262px}
+  *{box-sizing:border-box} html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.78;font-size:15px}
+  header.hero{background:linear-gradient(135deg,var(--red),var(--red-d));color:#fff;padding:34px 40px 30px}
+  .kicker{font-size:13px;letter-spacing:.18em;opacity:.85;margin:0 0 8px}
+  header.hero h1{font-size:26px;margin:0 0 10px;font-weight:800}
+  .hero .meta{font-size:13px;opacity:.93}
+  .layout{display:flex;align-items:flex-start}
+  aside.nav{position:sticky;top:0;align-self:flex-start;width:var(--navw);flex:none;height:100vh;
+    background:#fff;border-right:1px solid var(--line);padding:22px 0;overflow-y:auto}
+  .nav .brand{font-weight:800;color:var(--red);font-size:15px;padding:0 22px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+  .nav .grp{font-size:12px;letter-spacing:.04em;font-weight:800;color:var(--ink);padding:11px 18px;margin:6px 10px 2px;display:flex;gap:8px;align-items:center;cursor:pointer;border-radius:9px;transition:.15s}
+  .nav .grp:hover{background:var(--bg)} .nav .grp.active{background:var(--red);color:#fff}
+  .nav .grp.active .gn{background:#fff;color:var(--red)}
+  .nav .grp .gn{background:var(--red);color:#fff;border-radius:6px;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+  .nav .sub{display:none} .nav .sub.show{display:block}
+  .nav a{display:flex;gap:8px;align-items:flex-start;padding:6px 20px 6px 30px;color:var(--muted);text-decoration:none;
+    font-size:13px;border-left:3px solid transparent;transition:.15s;line-height:1.35}
+  .nav a:hover{background:var(--bg);color:var(--ink)}
+  .nav a.active{color:var(--red-d);border-left-color:var(--red);background:#fdf3f5;font-weight:700}
+  .nav a .dot{color:#c9cfd9;font-size:12px;flex:none} .nav a.active .dot{color:var(--red)}
+  main{flex:1;min-width:0;padding:24px 40px 80px;max-width:920px}
+  .themehead{background:linear-gradient(135deg,#2a3344,#1c2433);color:#fff;border-radius:14px;padding:18px 24px;margin:0 0 16px;display:flex;gap:14px;align-items:center}
+  .themehead .tn{background:var(--red);width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex:none}
+  .themehead h2{margin:0;font-size:20px;border:none;padding:0} .themehead p{margin:2px 0 0;font-size:13px;opacity:.85}
+  .theme{display:none} .theme.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 28px;margin:0 0 16px;
+    box-shadow:0 1px 2px rgba(20,30,50,.04);scroll-margin-top:14px}
+  h2{font-size:18px;margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+  h2 .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;
+    background:var(--chip);color:var(--red-d);font-size:13px;font-weight:800;flex:none;transform:translateY(3px)}
+  .q{font-size:13.5px;color:var(--muted);font-weight:600;margin:2px 0 12px;padding-left:36px}
+  h3{font-size:14.5px;margin:16px 0 6px;color:var(--red-d);display:flex;align-items:center;gap:8px}
+  h3 .ic{width:19px;height:19px;border-radius:5px;background:var(--chip);display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:var(--red-d)}
+  p{margin:8px 0} .big{font-size:16px;font-weight:800;color:var(--red-d)}
+  .block{border:1px solid var(--line);border-radius:12px;padding:4px 16px 12px;margin:12px 0;background:#fcfcfe}
+  .meaning{border-left:4px solid var(--red);background:#fdf3f5;border-radius:0 10px 10px 0;padding:11px 16px;margin:12px 0}
+  .meaning.good{border-color:var(--good);background:#eef9f3} .meaning.gold{border-color:var(--gold);background:#fff8ec}
+  .meaning b{color:var(--red-d)} .meaning.good b{color:var(--good)} .meaning.gold b{color:var(--gold)}
+  .action{display:flex;gap:10px;align-items:flex-start;background:var(--ink);color:#fff;border-radius:10px;padding:11px 15px;margin:11px 0;font-size:14px}
+  .action .lab{font-weight:800;color:#ffd2da;flex:none}
+  ul.clean{margin:8px 0;padding-left:20px} ul.clean li{margin:6px 0}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 4px}
+  .kpi{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .kpi .l{font-size:12px;color:var(--muted);margin-bottom:5px} .kpi .v{font-size:20px;font-weight:800;color:var(--red-d)} .kpi .d{font-size:11.5px;margin-top:3px;color:var(--muted)}
+  .bars{margin:11px 0}
+  .bar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}
+  .bar .lab{width:122px;flex:none;text-align:right;color:var(--muted)}
+  .bar .track{flex:1;background:var(--bg);border-radius:7px;height:21px;overflow:hidden;border:1px solid var(--line)}
+  .bar .fill{height:100%;border-radius:7px;background:var(--red);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-weight:700;font-size:12px}
+  .bar .fill.g{background:var(--good)} .bar .fill.p{background:var(--purple)} .bar .fill.gy{background:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin:9px 0}
+  th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line)} th:first-child,td:first-child{text-align:left}
+  thead th{background:var(--red);color:#fff;font-weight:700}
+  .chartbox{position:relative;height:260px;margin:6px 0} .two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .fly{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:center;margin:14px 0;font-size:12.5px}
+  .fstep{background:#fff;border:2px solid var(--red);color:var(--red-d);border-radius:10px;padding:8px 12px;font-weight:700;text-align:center;max-width:150px}
+  .farrow{color:var(--red);font-weight:800}.farrow small{display:block;color:var(--muted);font-weight:400;font-size:11px}
+  .para{counter-reset:p}
+  .para .row{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)} .para .row:last-child{border-bottom:none}
+  .para .row:before{counter-increment:p;content:"悖論 "counter(p);flex:none;background:var(--gold);color:#fff;font-weight:800;border-radius:8px;padding:3px 9px;font-size:12px;height:fit-content}
+  .rec{counter-reset:r}
+  .rec .item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)} .rec .item:last-child{border-bottom:none}
+  .rec .item:before{counter-increment:r;content:counter(r);flex:none;width:27px;height:27px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .rec .item .t b{color:var(--red-d)}
+  .note{font-size:13px;color:var(--muted)} .idx{color:var(--red);font-weight:800}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;margin-top:18px;line-height:1.8}
+  .navtoggle{display:none}
+  @media(max-width:880px){
+    aside.nav{position:fixed;left:0;top:0;z-index:50;transform:translateX(-100%);box-shadow:2px 0 16px rgba(0,0,0,.15)} aside.nav.open{transform:none}
+    main{padding:20px 18px 60px}.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.bar .lab{width:88px}
+    .navtoggle{display:inline-flex;position:fixed;top:14px;left:14px;z-index:60;background:var(--red);color:#fff;border:none;border-radius:9px;padding:9px 13px;font-size:18px;font-weight:800}
+    header.hero{padding-left:64px}header.hero h1{font-size:21px}.q{padding-left:0}
+  }
+</style>
+</head>
+<body>
+<div id="authgate">
+  <div class="agbox">
+    <div class="agt">Pocky 芒果百香</div>
+    <div class="ags">策略洞察報告・請輸入密碼</div>
+    <input id="authpw" type="password" placeholder="密碼" autocomplete="off" onkeydown="if(event.key==='Enter')authCheck()">
+    <button onclick="authCheck()">進入報告</button>
+    <div id="autherr">密碼錯誤,請再試一次</div>
+  </div>
+</div>
+<style>
+  #authgate{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#C8102E,#9c0c23);display:flex;align-items:center;justify-content:center;font-family:"Noto Sans TC","PingFang TC",sans-serif}
+  #authgate .agbox{background:#fff;border-radius:16px;padding:36px 32px;max-width:360px;width:88%;box-shadow:0 14px 44px rgba(0,0,0,.28);text-align:center}
+  #authgate .agt{font-size:22px;font-weight:800;color:#9c0c23;margin-bottom:6px}
+  #authgate .ags{font-size:14px;color:#5b6675;margin-bottom:20px}
+  #authgate input{width:100%;padding:11px 13px;border:1px solid #e6e9ef;border-radius:9px;font-size:15px;margin-bottom:12px}
+  #authgate button{width:100%;padding:11px;border:none;border-radius:9px;background:#C8102E;color:#fff;font-weight:800;font-size:15px;cursor:pointer}
+  #authgate #autherr{color:#C8102E;font-size:13px;margin-top:10px;display:none}
+</style>
+<script>
+  /* ===== 把下面這行的密碼改成你要的,存檔即可 ===== */
+  var SITE_PASSWORD = "pocky2026";
+  /* ============================================ */
+  document.documentElement.style.overflow="hidden";
+  function authCheck(){
+    if(document.getElementById("authpw").value===SITE_PASSWORD){
+      var g=document.getElementById("authgate"); if(g) g.remove();
+      document.documentElement.style.overflow="";
+    }else{document.getElementById("autherr").style.display="block";}
+  }
+  window.addEventListener("DOMContentLoaded",function(){var p=document.getElementById("authpw");if(p)p.focus();});
+</script>
+<button class="navtoggle" onclick="document.querySelector('aside.nav').classList.toggle('open')">☰</button>
+<div class="layout">
+  <aside class="nav">
+    <div class="brand">Pocky 芒果百香<br>策略洞察報告</div>
+    <div class="grp active" data-theme="1"><span class="gn">1</span>數據洞察（10）</div>
+    <div class="sub show" data-subof="1">
+      <a href="#d1" data-s="d1" data-theme="1"><span class="dot">●</span>規模與銷量</a>
+      <a href="#d2" data-s="d2" data-theme="1"><span class="dot">●</span>人口輪廓</a>
+      <a href="#d3" data-s="d3" data-theme="1"><span class="dot">●</span>消費力與價格敏感</a>
+      <a href="#d4" data-s="d4" data-theme="1"><span class="dot">●</span>生活型態與購買情境</a>
+      <a href="#d5" data-s="d5" data-theme="1"><span class="dot">●</span>地理與通路</a>
+      <a href="#d6" data-s="d6" data-theme="1"><span class="dot">●</span>高頻高值的活躍客</a>
+      <a href="#d7" data-s="d7" data-theme="1"><span class="dot">●</span>嗜甜卻也買健康食品</a>
+      <a href="#d8" data-s="d8" data-theme="1"><span class="dot">●</span>與乳製品天生契合</a>
+      <a href="#d9" data-s="d9" data-theme="1"><span class="dot">●</span>跨口味嘗試者</a>
+      <a href="#d10" data-s="d10" data-theme="1"><span class="dot">●</span>跨品牌＝茶飲＋乳品</a>
+    </div>
+    <div class="grp" data-theme="2"><span class="gn">2</span>收斂關鍵議題（10）</div>
+    <div class="sub" data-subof="2">
+      <a href="#k1" data-s="k1" data-theme="2"><span class="dot">●</span>受眾覆蓋率 83%</a>
+      <a href="#k2" data-s="k2" data-theme="2"><span class="dot">●</span>跨期重複率（兩期兩批人）</a>
+      <a href="#k3" data-s="k3" data-theme="2"><span class="dot">●</span>會回購但不回購同口味</a>
+      <a href="#k4" data-s="k4" data-theme="2"><span class="dot">●</span>件數 1.8 倍</a>
+      <a href="#k5" data-s="k5" data-theme="2"><span class="dot">●</span>串成模型與悖論</a>
+      <a href="#k6" data-s="k6" data-theme="2"><span class="dot">●</span>價格敏感卻非優惠獵人</a>
+      <a href="#k7" data-s="k7" data-theme="2"><span class="dot">●</span>coupon 的通路依賴</a>
+      <a href="#k8" data-s="k8" data-theme="2"><span class="dot">●</span>競品是「飲料的佐食」</a>
+      <a href="#k9" data-s="k9" data-theme="2"><span class="dot">●</span>廣度型成長算術</a>
+      <a href="#k10" data-s="k10" data-theme="2"><span class="dot">●</span>男性＝家庭採購代理人</a>
+    </div>
+    <div class="grp" data-theme="3"><span class="gn">3</span>未來建議</div>
+    <div class="sub" data-subof="3">
+      <a href="#r1" data-s="r1" data-theme="3"><span class="dot">●</span>成長槓桿總覽</a>
+      <a href="#r2" data-s="r2" data-theme="3"><span class="dot">●</span>商品與規格策略</a>
+      <a href="#r3" data-s="r3" data-theme="3"><span class="dot">●</span>受眾經營藍圖</a>
+      <a href="#r4" data-s="r4" data-theme="3"><span class="dot">●</span>跨口味/跨品牌聯名</a>
+      <a href="#r5" data-s="r5" data-theme="3"><span class="dot">●</span>競品買家狙擊獲新</a>
+      <a href="#r6" data-s="r6" data-theme="3"><span class="dot">●</span>與超商跨品類聯合檔期</a>
+      <a href="#r7" data-s="r7" data-theme="3"><span class="dot">●</span>社群/內容嘗鮮擴散</a>
+      <a href="#r8" data-s="r8" data-theme="3"><span class="dot">●</span>受眾跨渠道全面溝通</a>
+    </div>
+  </aside>
+  <main>
+    <header class="hero">
+      <p class="kicker">STRATEGIC INSIGHT REPORT</p>
+      <h1>Pocky 芒果果粒百香風味優格棒｜策略洞察報告</h1>
+      <div class="meta">廣告期 2026/04/29–05/26（OPENPOINT × coupon）｜純人群與銷量分析</div>
+    </header>
+
+    <!-- ===== 主題一 數據洞察 ===== -->
+    <div class="theme active" id="theme-1">
+      <div class="themehead"><div class="tn">1</div><div><h2>數據洞察（10 點）</h2><p>百香買家是誰：規模、輪廓、消費力、生活型態、地理，以及高頻高值、嗜甜顧健康、乳製品契合、跨口味跨品牌的深度特徵。</p></div></div>
+
+      <section id="d1">
+        <h2><span class="num">1</span>規模與銷量</h2>
+        <div class="kpis">
+          <div class="kpi"><div class="l">實際買家</div><div class="v">9,825</div><div class="d">去重消費者</div></div>
+          <div class="kpi"><div class="l">銷售件數</div><div class="v">14,423</div><div class="d">總數量</div></div>
+          <div class="kpi"><div class="l">件數/人</div><div class="v">1.38</div><div class="d">平均</div></div>
+          <div class="kpi"><div class="l">六都佔比</div><div class="v">~75%</div><div class="d">都會集中</div></div>
+        </div>
+        <h3><span class="ic">★</span>件數/人隨年齡上升</h3>
+        <table><thead><tr><th>年齡</th><th>件數/人(女)</th><th>型態</th></tr></thead><tbody>
+          <tr><td>18–24</td><td>1.19</td><td>單買嚐鮮</td></tr><tr><td>25–34</td><td>1.23</td><td>單買嚐鮮</td></tr>
+          <tr><td>35–44</td><td>1.36</td><td>核心</td></tr><tr><td>45–54</td><td>1.53</td><td>偏囤購</td></tr><tr><td>55–64</td><td>1.66</td><td>家庭/囤購</td></tr>
+        </tbody></table>
+        <div class="meaning good"><b>意義：熟齡＝囤貨/家庭採購，年輕＝單買嚐鮮。</b>商品規格應分眾——熟齡推多入家庭號拉客單，年輕維持單入低門檻拉試用。</div>
+      </section>
+
+      <section id="d2">
+        <h2><span class="num">2</span>人口輪廓</h2>
+        <div class="two">
+          <div><div class="chartbox"><canvas id="cAge"></canvas></div></div>
+          <div>
+            <h3><span class="ic">◷</span>核心：35–54 歲女性</h3>
+            <p>女性約 <b>68%</b>、35–54 歲合計約 <b>65%</b>，35–44 女、45–54 女為前兩大族群。</p>
+            <h3><span class="ic">★</span>男性佔 32%，被低估</h3>
+            <p>百香優格棒直覺是女性商品，但<b>男性 35–54 合計近 2,000 人</b>、件數/人不輸女性（很可能買給家庭/小孩）。</p>
+            <div class="meaning"><b>意義：</b>男性是沒被特別溝通的隱藏客群，值得測男性向/家庭情境素材。</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="d3">
+        <h2><span class="num">3</span>消費力與價格敏感（輪廓・index）</h2>
+        <ul class="clean">
+          <li><b>價格敏感度極高：</b>高敏感分群 index <span class="idx">2.9–3.4 倍</span>，低敏感僅 0.27。</li>
+          <li><b>新品探索高：</b>愛嘗新分群 index <span class="idx">3.0 倍</span>，與新品上市契合。</li>
+          <li><b>回購傾向高：</b>94% 落在回購率前段（index 2.0–2.7）。</li>
+          <li><b>消費價值中段為主：</b>大眾主力消費層、非高端。</li>
+        </ul>
+        <div class="meaning gold"><b>關鍵反差：</b>價格敏感度雖高，但「優惠獵人」標籤反而 −89%——他們會被「值得的限時優惠」打動，卻不是天天追低價的撿便宜族。（策略含意見收斂 #6）</div>
+      </section>
+
+      <section id="d4">
+        <h2><span class="num">4</span>生活型態與購買情境</h2>
+        <h3><span class="ic">◷</span>生活型態（過度指標 %）</h3>
+        <p>螞蟻人/甜食 <b>+99%</b>、預購嘗鮮 <b>+111%</b>、百貨常客 <b>+111%</b>、網購愛好 <b>+97%</b>、藥妝愛買 <b>+83%</b>、速食迷 +52%、健康食品 +53%——<b>嗜甜、嘗鮮、愛逛愛網購的全通路消費者</b>。</p>
+        <h3><span class="ic">★</span>百香其實是「飲料的附帶購買」</h3>
+        <p>把「TOP1 購買大分類」攤開，<b>飲料類合計（≈1,185 人）比「零食」(864 人) 還多</b>——對多數人來說，進超商主要買飲料/咖啡，百香是順手帶的。</p>
+        <div class="chartbox" style="height:230px"><canvas id="cCat"></canvas></div>
+        <div class="meaning good"><b>意義：購買情境由「飲料」帶動。</b>陳列與聯名應綁飲料/咖啡動線。（策略含意見收斂 #8）</div>
+      </section>
+
+      <section id="d5">
+        <h2><span class="num">5</span>地理與通路</h2>
+        <ul class="clean">
+          <li><b>都會集中：</b>雙北約 36%、六都約 75%；台北、新北、台中過度集中。</li>
+          <li><b>社區/幹道生活圈：</b>門市商圈集中「住宅區—幹道型 (+131%)、純住宅型 (+130%)」。</li>
+          <li><b>傍晚時段：</b>晚餐時段 index 1.46（過度）。</li>
+          <li><b>OPENPOINT 支付生態：</b>OPEN錢包 +241%、點數折抵 +219%、行動隨時取 +115% 全面過度。</li>
+          <li><b>地理反差：</b>北部人多但件數/人低（台北 1.34）；中南部人少但囤更多（彰化 1.55、高雄 1.48）。</li>
+        </ul>
+        <div class="meaning"><b>意義：</b>資源壓都會社區/幹道門市與傍晚時段；北部衝廣度、中南部衝客單。</div>
+      </section>
+
+      <section id="d6">
+        <h2><span class="num">6</span>他們是「高頻 × 高值 × 近期活躍」的主力客</h2>
+        <p>把「回購傾向高」拆成完整 RFM 後，三維度全面集中前段，是不折不扣的活躍主力：</p>
+        <div class="two">
+          <div><div class="chartbox" style="height:230px"><canvas id="cRFM"></canvas></div></div>
+          <div><ul class="clean">
+            <li><b>消費頻次：</b>95% 在前段，index <span class="idx">2.7／2.0 倍</span>。</li>
+            <li><b>消費金額：</b>96% 在前段，index <span class="idx">2.7／2.1 倍</span>。</li>
+            <li><b>近因/活躍：</b>近期活躍級 index <span class="idx">3.0 倍</span>。</li>
+            <li><b>回購率分級：</b>94% 在前段。</li>
+          </ul></div>
+        </div>
+        <div class="meaning good"><b>意義：不是偶爾路過的低值客，而是高頻、近期、消費力中上的活躍主力。</b>代表對他們做再行銷的「可承接性」很高——他們本來就常來常買，差的只是「再給一個回來買百香的理由」。這是「養回購」建議成立的根基。</div>
+      </section>
+
+      <section id="d7">
+        <h2><span class="num">7</span>嗜甜，卻也買健康食品</h2>
+        <div class="bars">
+          <div class="bar"><span class="lab">螞蟻人/甜食</span><div class="track"><div class="fill" style="width:90%">+99%</div></div></div>
+          <div class="bar"><span class="lab">健康食品購買</span><div class="track"><div class="fill g" style="width:52%">+53%</div></div></div>
+          <div class="bar"><span class="lab">健身愛好</span><div class="track"><div class="fill g" style="width:22%">+20%</div></div></div>
+          <div class="bar"><span class="lab">健康輕食</span><div class="track"><div class="fill g" style="width:16%">+14%</div></div></div>
+        </div>
+        <p>同一群人，甜食控 +99%，卻也在健康食品 +53%、健身 +20% 過度集中——「健康—放縱並存」。</p>
+        <div class="meaning"><b>意義：罪惡感補償型消費。</b>他們會吃甜，但希望吃得「沒那麼罪惡」；<b>「優格棒」本身就站在甜點裡相對健康的位置</b>，可主打「想吃甜又顧一點健康」。</div>
+      </section>
+
+      <section id="d8">
+        <h2><span class="num">8</span>與乳製品天生契合</h2>
+        <ul class="clean">
+          <li><b>跨品牌</b>第二/三品牌大量是乳品：瑞穗、光泉、福樂——他們本來就在買乳製品。</li>
+          <li><b>常買品類</b>含冷藏飲品 <b>+94%</b>、風味蛋——日常購物籃就有乳製/冷藏品。</li>
+        </ul>
+        <div class="meaning good"><b>意義：產品定位精準命中受眾的實際購買行為。</b>「優格棒」的乳製元素打在一群<b>本來就在買乳品</b>的人身上——乳製概念是可放大的溝通資產，而非要克服的門檻。</div>
+        <p class="note">註：另有「乳糖不耐」標籤呈現 −65%（偏低），方向與上述一致；惟該標籤內部欄位為 cnt_ratio_Dairy、定義語意待數據端確認，故本點以「實際購買乳品行為」為主要證據，不以該標籤為據。</p>
+      </section>
+
+      <section id="d9">
+        <h2><span class="num">9</span>他們是「跨口味嘗試者」</h2>
+        <div class="bars">
+          <div class="bar"><span class="lab">芒果百香(本支)</span><div class="track"><div class="fill" style="width:95%">160</div></div></div>
+          <div class="bar"><span class="lab">草莓口味</span><div class="track"><div class="fill p" style="width:50%">82</div></div></div>
+          <div class="bar"><span class="lab">巧克力口味</span><div class="track"><div class="fill p" style="width:47%">77</div></div></div>
+          <div class="bar"><span class="lab">藍莓口味</span><div class="track"><div class="fill p" style="width:30%">47</div></div></div>
+        </div>
+        <p>百香買家同時也買草莓、巧克力、藍莓；跨品牌前二三名也大量是 Pocky／格力高自家。代表他們<b>在品牌內跨口味嘗鮮</b>，不死守單一口味。</p>
+        <div class="meaning"><b>意義：忠於「品牌」與「嘗新」，不忠於「單一口味」。</b>結合高新品探索（×3.0），<b>新口味本身就是召回他們的鉤子</b>。（策略含意見收斂 #3 跨口味回購、建議 #4）</div>
+      </section>
+
+      <section id="d10">
+        <h2><span class="num">10</span>跨品牌偏好＝茶飲 ＋ 乳品</h2>
+        <div class="chartbox"><canvas id="cBrand"></canvas></div>
+        <p>扣除自家品牌，他們的第二、三品牌集中在<b>茶飲（麥香、KIRIN 午後、純喫茶、黑松、可口可樂）與乳品（瑞穗、光泉、福樂）</b>。</p>
+        <div class="meaning good"><b>意義：百香的天然搭檔是「飲料」。</b>購物籃裡百香旁邊放的是茶飲與乳品——為陳列、加價購、聯名提供具體對象。（見建議 #4）</div>
+      </section>
+    </div><!-- /theme-1 -->
+
+    <!-- ===== 主題二 收斂關鍵議題 ===== -->
+    <div class="theme" id="theme-2">
+      <div class="themehead"><div class="tn">2</div><div><h2>收斂關鍵議題（10 點）</h2><p>數據背後真正的策略意義——每個拆解「觀察 → 為什麼 → 代表什麼 → 行動」。</p></div></div>
+
+      <section id="k1">
+        <h2><span class="num">1</span>受眾覆蓋率 ~83% 代表什麼</h2>
+        <div class="q">我們使用到的 segment 佔「所有買過的人」約 80%。</div>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>扣除「無歸因」約 17%，<b>約 83% 買家落在我們名單之內</b>。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>我們對這品類買家的<b>可定址性極高</b>，且這群人畫像正好是平台資料最完整的一群——會買的人幾乎都「看得見、打得到」。</p></div>
+        <div class="meaning good"><b>正面：我們握有這品類的「買家地圖」</b>，投放不會大量浪費，audience-led 規劃可信度高。</div>
+        <div class="meaning gold"><b>隱藏張力：成長不能再靠「發現新受眾」。</b>名單外只剩約 17%，且多是難以數位精準觸及的自然客流。</div>
+        <div class="action"><span class="lab">行動</span><span>KPI 從「觸及多少新名單」轉向「既有名單的購買轉換率」，並對 83% 做分層集中投放。</span></div>
+      </section>
+
+      <section id="k2">
+        <h2><span class="num">2</span>跨期重複率：兩期幾乎是兩批人</h2>
+        <div class="q">同一商品在兩個走期，有多少人重複購買？</div>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3>
+          <table><thead><tr><th>商品</th><th>A 期買家</th><th>B 期買家</th><th>兩期都買</th><th>回購率(A→B)</th><th>B 新客佔比</th></tr></thead><tbody>
+            <tr><td>百香(芒果)</td><td>9,022</td><td>9,825</td><td>283</td><td>3.1%</td><td>97.1%</td></tr>
+            <tr><td>藍莓</td><td>8,701</td><td>8,232</td><td>369</td><td>4.2%</td><td>95.5%</td></tr>
+            <tr><td>草莓蜜桃</td><td>1,882</td><td>95</td><td>0</td><td>0.0%</td><td>100%</td></tr>
+          </tbody></table>
+          <p class="note">算法：容斥原理 兩期都買 ＝ A ＋ B − 聯集(A∪B)；得到的是「人數」,非「名單」(個別用戶 ID 目前 API 不可取)。草莓蜜桃 B 期因疑似缺貨僅 95 人,重複 0 不具代表性。</p>
+          <h3><span class="ic">∵</span>拆解</h3><p>同口味零食在數週內由同一人再買的機率本就低;結合高覆蓋,我們每波都在同一個大池子裡「抽出不同的個體」成交。</p></div>
+        <div class="meaning"><b>代表：每一波幾乎換一批新面孔。</b>三支重複率都極低(百香 3.1%、藍莓 4.2%),百香並非異常——這是「廣度驅動的試用型商品」的常態,不該誤讀成「沒留住客」。</div>
+        <div class="meaning gold"><b>最大未開發槓桿＝前波買家。</b>B 期約 <b>97% 是前段未購此口味者</b>;反過來說,前段買過的那批人(百香約 9,000)幾乎是一張<b>全新、未被再行銷的名單</b>。</div>
+        <div class="action"><span class="lab">行動</span><span>(a) 多波多機制持續換血、擴大試用廣度;(b) 對前波買家做回購喚醒,把廣度補上深度。</span></div>
+      </section>
+
+      <section id="k3">
+        <h2><span class="num">3</span>他們「會回購」，只是不回購同一支口味</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>承上節——同口味跨期重複率僅約 <b>3%</b>;但輪廓層顯示這群人<b>整體回購傾向很高</b>(回購率/RFM 分級 index 2.7),且同時也買草莓、巧克力、藍莓口味。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>兩個看似矛盾的數據其實一致:他們是<b>會回購的人,只是回購發生在跨口味/跨品類,不在同一支百香</b>。</p></div>
+        <div class="meaning gold"><b>代表：忠於「品牌」與「嘗新」,不忠於「單一口味」。</b>結合高新品探索(×3.0),<b>新口味本身就是召回他們的最強鉤子</b>。</div>
+        <div class="action"><span class="lab">行動</span><span>承接他們的回購傾向要靠「下一個新口味/新品」輪替,而非一直賣同一支百香。(詳見建議 #4 口味矩陣)</span></div>
+      </section>
+
+      <section id="k4">
+        <h2><span class="num">4</span>件數 ~1.8 倍：囤貨式試用</h2>
+        <div class="q">coupon 買家平均件數約為全體的 178%。</div>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>coupon 約 <b>2.4 件/人</b> vs 全體 1.38，約 <b>1.8 倍</b>。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>兌換機制（點數＋定額）讓「一次多買/囤貨」划算，觸發單次籃子放大。</p></div>
+        <div class="meaning good"><b>代表①：同時拉「轉換」與「單次產出」</b>——一次活動同時做了拉人與拉量。</div>
+        <div class="meaning gold"><b>代表②：囤貨式試用。</b>結合低回購，多件購買多半一次性、以單價讓利換來，需用後續回購回收。</div>
+        <div class="action"><span class="lab">行動</span><span>把 coupon 定位為「家戶滲透/試用種子」，KPI 綁「coupon 後 N 週回購率」。</span></div>
+      </section>
+
+      <section id="k5">
+        <h2><span class="num">5</span>串成一個模型 ＋ 三個悖論</h2>
+        <p>把覆蓋、重疊、件數接起來，是一個「廣度 × 單次量」驅動、缺回購回路的飛輪：</p>
+        <div class="fly">
+          <div class="fstep">高覆蓋池<br><small style="color:var(--muted)">~83% 可定址</small></div>
+          <div class="farrow">→<small>coupon 加速</small></div><div class="fstep">單波啟動</div>
+          <div class="farrow">→<small>件數 ×1.8</small></div><div class="fstep">囤貨式試用</div>
+          <div class="farrow">→<small>低回購 ~3%</small></div><div class="fstep">下一波再換人</div>
+        </div>
+        <p><b>飛輪缺了「回購回路」</b>——補上它,才能從線性成長變複利成長。</p>
+        <div class="para">
+          <div class="row"><div><b>高價格敏感,卻不是優惠獵人。</b>→ 用稀缺型優惠,長期低價反而折損新品價值感。</div></div>
+          <div class="row"><div><b>coupon 衝高件數,卻沒帶回購。</b>→ 量被提前拉出,要看 coupon 後的回購回收。</div></div>
+          <div class="row"><div><b>覆蓋已 83%,成長卻不能靠找新受眾。</b>→ 改由「頻率＋口味輪替＋回購」驅動。</div></div>
+        </div>
+      </section>
+
+      <section id="k6">
+        <h2><span class="num">6</span>價格敏感，卻不是「優惠獵人」</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>價格敏感度高分群 index <span class="idx">3.4 倍</span>；「優惠獵人」標籤 <b>−89%</b>。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>價格敏感＝對划算有感；優惠獵人＝為折扣而買。百香買家屬前者。</p></div>
+        <div class="meaning gold"><b>代表：用「稀缺型限時優惠」最有效,長期低價是浪費。</b>他們會為「值得、限定的好康」出手(新品 coupon 正中靶心),但長期壓價會稀釋新品的價值感與嘗鮮溢價。</div>
+        <div class="action"><span class="lab">行動</span><span>優惠走「限時/限量/新品限定」框架;避免養成「等折扣才買」。</span></div>
+      </section>
+
+      <section id="k7">
+        <h2><span class="num">7</span>coupon 成效有「OPENPOINT 通路依賴」</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>支付偏好全面倒向 OPENPOINT 生態:OPEN錢包 <b>+241%</b>、點數折抵 <b>+219%</b>、行動隨時取 <b>+115%</b>。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>coupon 機制是「1 點 OPENPOINT 點數＋NT$28」。這群人本是點數活躍者,門檻不痛反而順手——<b>成效部分來自「受眾與機制天生匹配」的紅利</b>。</p></div>
+        <div class="meaning"><b>代表①：修正「降低門檻」直覺。</b>對這群點數重度用戶門檻不痛;真正可能流失的是非 OPENPOINT 生態的人。</div>
+        <div class="meaning gold"><b>代表②：成效有通路依賴性。</b>換到非 OPENPOINT 通路投放,成效未必複製——評估擴張要把這前提講清楚。</div>
+        <div class="action"><span class="lab">行動</span><span>延續 OPENPOINT 生態打法;外擴通路先小測再放量,並埋點驗證非點數用戶的兌換流失。</span></div>
+      </section>
+
+      <section id="k8">
+        <h2><span class="num">8</span>真正的競品,是「飲料的佐食」</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3>
+          <div class="bars">
+            <div class="bar"><span class="lab">TOP1＝飲料類</span><div class="track"><div class="fill p" style="width:90%">1,185 人</div></div></div>
+            <div class="bar"><span class="lab">TOP1＝零食</span><div class="track"><div class="fill gy" style="width:66%">864 人</div></div></div>
+          </div>
+          <h3><span class="ic">∵</span>拆解</h3><p>多數人進超商主要任務是「買一杯喝的」,百香是搭飲料順手帶的佐食。</p></div>
+        <div class="meaning"><b>代表:百香的競爭框架要重新定義。</b>它競爭的不是其他餅乾,而是<b>「配飲料的那一口甜」</b>——要贏的是「買咖啡/手搖時順手拿什麼配」。這改寫陳列(飲料動線旁)、聯名(飲料/CITY CAFE)與溝通情境(下午茶拍檔)。</div>
+        <div class="action"><span class="lab">行動</span><span>品類定位從「餅乾零食」改寫為「飲料佐食」;陳列、聯名、素材全往「飲料＋百香」情境靠。</span></div>
+      </section>
+
+      <section id="k9">
+        <h2><span class="num">9</span>廣度型商品的「成長算術」</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>覆蓋 ~83%(名單外空間小)＋跨期重疊 ~3%(每波換人)＋件數 ×1.8(單次量大)。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>這不是「養死忠靠回購複利」的商品,而是「在大池子裡一波波啟動新試用者」的廣度型商品。</p></div>
+        <div class="meaning"><b>代表:成長公式是「啟動頻率 × 每波觸及 × 單次量」,不是「回購率」。</b>衡量 KPI 要換——盯的是「多快再啟動一批、每波打到多少新面孔、每人單次帶幾件」,而非傳統回購留存。</div>
+        <div class="action"><span class="lab">行動</span><span>KPI 改成「波次節奏 × 每波新觸及 × 單次件數」;並把「回購回路」當新增成長專案來補。</span></div>
+      </section>
+
+      <section id="k10">
+        <h2><span class="num">10</span>男性,是被低估的「家庭採購代理人」</h2>
+        <div class="block"><h3><span class="ic">◷</span>觀察</h3><p>男性佔約 <b>32%</b>(35–54 男近 2,000 人),件數/人不輸女性(男 45–54 約 1.43、55–64 約 1.47)。</p>
+        <h3><span class="ic">∵</span>拆解</h3><p>百香直覺被當女性商品,但男性佔比不低、單次還買得多——較可能是<b>「買回家給家人/小孩」的家庭採購</b>。</p></div>
+        <div class="meaning gold"><b>代表:男性是沒被特別溝通的成長空間。</b>素材全做女性向,等於放掉三分之一的買家。他們的角色更像「家庭採購代理人」。</div>
+        <div class="action"><span class="lab">行動</span><span>測「帶回家給家人/分享」訴求的男性/家庭素材,搭配多入規格,驗證可放大性。</span></div>
+      </section>
+
+      <section id="ksum" style="background:#fbfcfe">
+        <h3 style="margin-top:4px"><span class="ic">∑</span>收斂成一句話</h3>
+        <p class="big">百香是一台「高覆蓋、廣度驅動的飲料佐食試用引擎」,受眾是一群高頻高值、價格有感但非撿便宜、嗜甜又顧健康的都會家庭消費者。</p>
+        <p>成長不靠「找新受眾」或「同口味回購」,而靠<b>稀缺型優惠 × 新口味輪替 × 飲料情境綁定</b>持續啟動既有大池裡的新面孔,並補上「回購回路」。</p>
+      </section>
+    </div><!-- /theme-2 -->
+
+    <!-- ===== 主題三 未來建議 ===== -->
+    <div class="theme" id="theme-3">
+      <div class="themehead"><div class="tn">3</div><div><h2>未來建議</h2><p>成長空間不在「找新受眾」,而在頻率、口味矩陣、回購回路與情境綁定。</p></div></div>
+
+      <section id="r1">
+        <h2><span class="num">1</span>成長槓桿總覽</h2>
+        <p>依「未開發程度」由大到小排序,建議優先投資:</p>
+        <div class="rec">
+          <div class="item"><div class="t"><b>養回購(最大未開發):</b>對前波買家、尤其 coupon 多件囤貨者再行銷,補上飛輪缺的回購回路。</div></div>
+          <div class="item"><div class="t"><b>口味矩陣經營:</b>以「下一支新口味」輪替召回——他們忠於品牌與嘗新、不忠於單一口味,新口味是最強回購鉤子。(詳見 #4)</div></div>
+          <div class="item"><div class="t"><b>增頻率(多波多機制):</b>維持波次與機制輪替(coupon／綑綁折扣／聯名),不同機制打到不同子群,持續換血擴大試用廣度。</div></div>
+          <div class="item"><div class="t"><b>情境綁定:</b>順「飲料佐食」定位,做飲料/咖啡動線陳列與聯名。</div></div>
+          <div class="item"><div class="t"><b>擴邊獲新(小而精):</b>若要真新客,把部分預算外擴到名單外/競品買家,並以 holdout 驗證增量。</div></div>
+        </div>
+      </section>
+
+      <section id="r2">
+        <h2><span class="num">2</span>商品與規格策略</h2>
+        <h3><span class="ic">●</span>規格分眾:囤購 vs 嚐鮮</h3>
+        <p>件數/人隨年齡上升(55–64 達 1.66、年輕僅 1.2),加上男性偏家庭採購——<b>雙規格並行</b>:熟齡與男性/家庭推<b>多入家庭號/分享包</b>拉客單;年輕維持<b>單入低門檻</b>拉試用。</p>
+        <h3><span class="ic">●</span>定位:低負擔的甜食</h3>
+        <p>受眾嗜甜卻也顧健康(健康食品 +53%、乳製品友善)。<b>主打「想吃甜又少點負擔」「優格×水果的小確幸」</b>,把「優格棒」的相對健康感放大成差異化賣點。</p>
+        <h3><span class="ic">●</span>飲料佐食的產品語言</h3>
+        <p>包裝/陳列/素材以「配一杯飲料」為情境主軸,讓它從「餅乾」變成「飲料的最佳拍檔」。</p>
+      </section>
+
+      <section id="r3">
+        <h2><span class="num">3</span>受眾經營藍圖</h2>
+        <p>用「拉新 → 試用 → 回購」三段把現有資產系統化:</p>
+        <table><thead><tr><th>階段</th><th>對象</th><th>做法</th></tr></thead><tbody>
+          <tr><td>拉新</td><td>名單外/競品買家(小而精)</td><td>稀缺型新品 coupon＋holdout 驗增量</td></tr>
+          <tr><td>試用</td><td>高潛力:高價格敏感×高新品探索×螞蟻人×都會社區</td><td>新品限定優惠、飲料情境素材</td></tr>
+          <tr><td>回購</td><td>前波買家、coupon 多件囤貨者、OPENPOINT 點數客</td><td>新口味召回、再行銷、點數加碼</td></tr>
+        </tbody></table>
+        <div class="meaning"><b>關鍵:</b>把「男性/家庭採購代理人」獨立成經營對象(家庭情境溝通),並善用受眾本是 OPENPOINT 點數活躍者的特性,把點數機制做成回購誘因。</div>
+      </section>
+
+      <section id="r4">
+        <h2><span class="num">4</span>跨口味／跨品牌聯名機會</h2>
+        <h3><span class="ic">●</span>跨口味:把「口味矩陣」當回購引擎</h3>
+        <p>買家跨口味嘗鮮、新品探索 ×3.0。<b>口味上市節奏＝回購節奏</b>:用「集滿全口味」「每月新口味」把一次性試用者持續召回,讓口味矩陣自己變成回購機制。</p>
+        <h3><span class="ic">●</span>跨品牌:綁飲料與乳品</h3>
+        <p>第二/三品牌集中茶飲與乳品。具體聯名/加價購對象:</p>
+        <div class="bars">
+          <div class="bar"><span class="lab">統一系</span><div class="track"><div class="fill p" style="width:90%">最高交集</div></div></div>
+          <div class="bar"><span class="lab">瑞穗/光泉/福樂(乳品)</span><div class="track"><div class="fill p" style="width:70%">乳品互補</div></div></div>
+          <div class="bar"><span class="lab">麥香/KIRIN午後/純喫茶</span><div class="track"><div class="fill p" style="width:62%">茶飲互補</div></div></div>
+          <div class="bar"><span class="lab">CITY CAFE</span><div class="track"><div class="fill" style="width:55%">咖啡情境</div></div></div>
+        </div>
+        <div class="meaning good"><b>具體可執行:</b>「CITY CAFE＋Pocky」下午茶加價購、「茶飲/乳品＋百香」組合陳列與聯名包;把高交集品牌變成共同行銷夥伴。</div>
+      </section>
+
+      <section id="r5">
+        <h2><span class="num">5</span>競品買家狙擊獲新</h2>
+        <p>目前獲新偏弱——「競品買家」觸及僅約 <b>6%</b>,但這群人的客單表現佳,是還沒被開發的拉新池。</p>
+        <ul class="clean">
+          <li><b>對象:</b>競品買家名單(現有受眾包),以及與其相似的名單外族群。</li>
+          <li><b>訴求:</b>用「果粒/優格的差異化口感」「新品限定」做轉換誘因,而非單純比價。</li>
+          <li><b>驗證:</b>小規模測試＋holdout 對照,確認真正帶來增量新客,而非在熟面孔裡循環。</li>
+        </ul>
+        <div class="meaning"><b>定位:</b>這是「擴邊獲新」槓桿的具體執行——把驗證有效的廣告漏斗,刻意導向名單外/競品買家,補上廣度引擎缺的新客來源。</div>
+      </section>
+
+      <section id="r6">
+        <h2><span class="num">6</span>與超商的跨品類聯合檔期</h2>
+        <p>順「飲料佐食」定位(買家 TOP1 品類是飲料、跨品牌集中茶飲乳品),把行銷從「單品促銷」升級為「<b>跨品類聯合檔期</b>」。</p>
+        <ul class="clean">
+          <li><b>玩法:</b>與超商談「百香 × 咖啡/茶飲」聯合促購檔(買飲料加購、組合價),借飲料的高客流帶動百香。</li>
+          <li><b>夥伴:</b>高交集品牌(統一系、瑞穗/光泉、麥香/KIRIN午後/純喫茶、CITY CAFE)可作共同行銷對象。</li>
+          <li><b>陳列:</b>檔期間把百香放到飲料/咖啡動線旁,讓「順手帶」變成「被設計的搭配」。</li>
+        </ul>
+        <div class="meaning good"><b>價值:</b>用別人的客流(飲料)養自己的銷量,且完全貼合受眾真實的購買情境。</div>
+      </section>
+
+      <section id="r7">
+        <h2><span class="num">7</span>社群/內容嘗鮮擴散</h2>
+        <p>受眾是早鳥嘗鮮族——預購嘗鮮 <b>+111%</b>、網購愛好 <b>+97%</b>、新品探索 ×3.0,天生愛搶先、愛分享。</p>
+        <ul class="clean">
+          <li><b>內容:</b>新口味「搶先看/開箱/試吃」,給早鳥族第一手話題。</li>
+          <li><b>通路:</b>結合他們活躍的網購/社群觸點做擴散,放大口碑。</li>
+          <li><b>節奏:</b>每支新口味上市搭一波內容,讓「嘗鮮擴散」成為口味矩陣的固定動作。</li>
+        </ul>
+        <div class="meaning"><b>定位:</b>把「高新品探索 × 網購愛好」這個受眾特性,轉成新品上市的免費擴散動能。</div>
+      </section>
+
+      <section id="r8">
+        <h2><span class="num">8</span>受眾跨渠道全面溝通</h2>
+        <div class="q">出發點：711／統一數據已涵蓋約 83% 的買家,這是一份高覆蓋的第一方受眾資產。</div>
+        <p>覆蓋率 83% 的真正價值,不只是「知道買家是誰」,而是<b>握有一份可被啟動的第一方受眾資產</b>。本檔分析看到的幾個現象,其實都在指向同一個結論:<b>這群人不該只在 OPENPOINT／RMN 站內溝通,而應用統一數據,跨渠道(Google、Meta、LINE…)在他們本來就活躍的地方接觸。</b>每一條跨渠道的理由,都直接對應到我們看到的數據:</p>
+        <h3><span class="ic">∵</span>數據 → 為什麼要跨渠道</h3>
+        <ul class="clean">
+          <li><b>覆蓋率 83%(收斂 #1)→ 資產要被「啟動」,不只被「看見」。</b>我們已握有近八成買家的第一方識別,把它鎖在站內只用一次很可惜;串接到站外渠道,同一份資產可以反覆觸及、放大價值。</li>
+          <li><b>全通路消費者(數據 #4／#5:網購 +97%、百貨 +111%、藥妝 +83%)→ 單一渠道打不滿。</b>他們的注意力本來就分散在電商、社群、實體之間;只在 OPENPOINT 溝通,等於只接觸到他們生活的一小片,跨渠道才能把同一個人「完整地」包覆。</li>
+          <li><b>coupon 的 OPENPOINT 通路依賴(收斂 #7)→ 用跨渠道分散風險。</b>本檔成效有一部分綁在 OPENPOINT 生態;把受眾延伸到 Google／Meta／LINE,能讓成效不再只押單一通路,也驗證這群人在站外是否同樣買單。</li>
+          <li><b>廣度型成長 × 低重複率(收斂 #2／#9:每波換一批人)→ 跨渠道直接擴大「每波新觸及」。</b>這台引擎靠「每波打到新面孔」運轉,而跨渠道正是把每波可觸及的池子做大的最直接手段——用同一份資料做 Lookalike,往「相似但站內沒打到」的人擴散。</li>
+          <li><b>高新品探索 × 網購愛好(數據 #3／#4)→ 站外是新品擴散的天然場域。</b>這群早鳥嘗鮮族活躍於社群與影音;新口味的搶先看、開箱、口碑,在 Meta／YouTube／LINE 上才擴散得開。</li>
+          <li><b>第一方購買行為當種子 → 比平台原生興趣更準。</b>用「真的買過」的人去串接各平台受眾與擴展,精準度遠勝平台的興趣標籤投放。</li>
+        </ul>
+        <div class="meaning good"><b>一句話:</b>「覆蓋 83%」這個數據資產,搭配「全通路、嘗鮮、廣度型」的受眾特性,等於明確指出下一步——<b>把站內驗證有效的受眾,用統一數據跨渠道活化</b>,讓同一群高價值的人在 Google／Meta／LINE 被一致地接觸與召回。</div>
+        <p class="note">衡量與前提:跨渠道統一回看「實際購買(711 POS／coupon 核銷)」做歸因與頻次控管;身分串接須符合資料使用規範與使用者同意(如「同意攜出」條款),投放前先確認隱私合規。</p>
+        <footer>資料來源:DataHub 商品銷售歸因(交易級)與受眾輪廓表(profile 級・index 對比全站)。本報告以分析推論為主,供格力高行銷決策參考。</footer>
+      </section>
+    </div><!-- /theme-3 -->
+  </main>
+</div>
+<script>
+const RED='#C8102E',RED2='#e2829a',GREEN='#1f9d6b',GREY='#b9c0cc',INK='#1c2433',PUR='#6b4bb0';
+Chart.defaults.font.family="'Noto Sans TC','PingFang TC',sans-serif";Chart.defaults.color='#5b6675';
+new Chart(cAge,{type:'bar',data:{labels:['35-44','45-54','25-34','55-64','18-24','>65','17歲以下'],
+ datasets:[{label:'女',data:[2362,2016,951,414,325,111,64],backgroundColor:RED,borderRadius:4,stack:'s'},
+  {label:'男',data:[1090,884,577,146,179,36,20],backgroundColor:RED2,borderRadius:4,stack:'s'}]},
+ options:{plugins:{title:{display:true,text:'買家數：性別 × 年齡',font:{size:13,weight:'700'},color:INK},legend:{position:'bottom'}},scales:{x:{stacked:true},y:{stacked:true}},responsive:true,maintainAspectRatio:false}});
+new Chart(cCat,{type:'bar',data:{labels:['飲料類合計','零食'],datasets:[{data:[1185,864],backgroundColor:[PUR,GREY],borderRadius:6,barPercentage:.5}]},
+ options:{indexAxis:'y',plugins:{title:{display:true,text:'TOP1 購買品類：飲料 > 零食（人）',font:{size:13,weight:'700'},color:INK},legend:{display:false}},responsive:true,maintainAspectRatio:false}});
+new Chart(cRFM,{type:'bar',data:{labels:['消費頻次','消費金額','近期活躍','回購率'],datasets:[{data:[2.73,2.69,2.96,2.72],backgroundColor:RED,borderRadius:5}]},
+ options:{indexAxis:'y',plugins:{title:{display:true,text:'RFM 集中於高分群（index×全站）',font:{size:13,weight:'700'},color:INK},legend:{display:false},tooltip:{callbacks:{label:c=>'index '+c.raw+'×'}}},scales:{x:{title:{display:true,text:'index（1=與全站相同）'}}},responsive:true,maintainAspectRatio:false}});
+new Chart(cBrand,{type:'bar',data:{labels:['統一系','瑞穗','麥香','光泉','黑松','純喫茶','福樂','KIRIN午後','可口可樂','義美'],datasets:[{data:[176,80,73,52,49,47,46,46,23,19],backgroundColor:PUR,borderRadius:4}]},
+ options:{indexAxis:'y',plugins:{title:{display:true,text:'常買的其他品牌（茶飲＋乳品為主）',font:{size:13,weight:'700'},color:INK},legend:{display:false}},responsive:true,maintainAspectRatio:false}});
+
+const links=[...document.querySelectorAll('aside.nav a')];const map={};links.forEach(a=>map[a.dataset.s]=a);
+const groups=[...document.querySelectorAll('.nav .grp')],subs=[...document.querySelectorAll('.nav .sub')],themes=[...document.querySelectorAll('.theme')],navEl=document.querySelector('aside.nav');
+function showTheme(n){themes.forEach(t=>t.classList.toggle('active',t.id==='theme-'+n));groups.forEach(g=>g.classList.toggle('active',g.dataset.theme===n));subs.forEach(s=>s.classList.toggle('show',s.dataset.subof===n));window.scrollTo({top:0});}
+groups.forEach(g=>g.addEventListener('click',()=>{showTheme(g.dataset.theme);navEl.classList.remove('open');}));
+links.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const n=a.dataset.theme;if(!document.getElementById('theme-'+n).classList.contains('active'))showTheme(n);setTimeout(()=>{const el=document.querySelector(a.getAttribute('href'));el&&el.scrollIntoView({behavior:'smooth',block:'start'});},40);navEl.classList.remove('open');}));
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));map[e.target.id]&&map[e.target.id].classList.add('active');}});},{rootMargin:'-12% 0px -78% 0px'});
+document.querySelectorAll('main section').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
